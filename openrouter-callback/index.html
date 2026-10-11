@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex" />
+    <title>Back to TinyTaleZzZ</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        text-align: center;
+      }
+      main {
+        width: 100%;
+        max-width: 380px;
+      }
+      .moon {
+        font-size: 56px;
+        line-height: 1;
+        margin-bottom: 12px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 26px;
+      }
+      p {
+        margin: 0 0 24px;
+        color: #94a3b8;
+        font-size: 17px;
+        line-height: 1.5;
+      }
+      .button {
+        display: block;
+        width: 100%;
+        padding: 18px 20px;
+        border-radius: 16px;
+        background: linear-gradient(90deg, #4ed3ed, #fc95c9);
+        color: #0f172a;
+        font-size: 19px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .small {
+        margin: 20px 0 0;
+        font-size: 14px;
+      }
+      [hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="moon">🌙</div>
+
+      <section id="ok" hidden>
+        <h1>You’re connected!</h1>
+        <p>Tap the button to go back to TinyTaleZzZ and finish setting up.</p>
+        <a id="open" class="button" href="#">Open TinyTaleZzZ</a>
+        <p class="small">If nothing happens, close this page and open the TinyTaleZzZ app.</p>
+      </section>
+
+      <section id="missing" hidden>
+        <h1>Almost there</h1>
+        <p>
+          This page is only used to bring you back to TinyTaleZzZ. Open the app and tap Connect again to finish
+          setting up.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      // OpenRouter sends people here as  https://<this page>/?code=...  after they tap Authorize. This page only
+      // hands that one-time code to the app (which holds the other half needed to use it); it stores nothing and
+      // sends nothing anywhere. The app link is fixed, so the code can only ever be passed to TinyTaleZzZ.
+      var APP_LINK = 'tinytalezzz://openrouter-callback';
+
+      var code = new URLSearchParams(window.location.search).get('code');
+      var valid = code && /^[A-Za-z0-9._~-]+$/.test(code);
+
+      if (valid) {
+        var target = APP_LINK + '?code=' + encodeURIComponent(code);
+        document.getElementById('open').setAttribute('href', target);
+        document.getElementById('ok').hidden = false;
+        // Some phones open the app straight away. Others only allow it from a tap, which is why there's a button.
+        window.location.replace(target);
+      } else {
+        document.getElementById('missing').hidden = false;
+      }
+    </script>
+  </body>
+</html>
